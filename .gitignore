@@ -1,0 +1,81 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+ENV/
+env/
+# **/.env
+.venv/
+
+# IDE - PyCharm
+.idea/
+*.iws
+*.iml
+*.ipr
+.idea_modules/
+
+# IDE - VS Code
+.vscode/
+*.code-workspace
+.history/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Local development settings
+# *.env
+# .env.local
+# .env.*.local
+
+# Log files
+*.log
+logs/
+log/
+
+# System files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Testing
+.coverage
+htmlcov/
+.tox/
+.pytest_cache/
+nosetests.xml
+coverage.xml
+*.cover
+
+/sample
+/unpacked_data
+/data
+/analysis
+/phaseone
+/phasetwo
+
+input/input.json
+input/input_timestamp.csv
+preprocessing_log.txt
+
+result_copy.jsonl
+submission/result.jsonl.backup
