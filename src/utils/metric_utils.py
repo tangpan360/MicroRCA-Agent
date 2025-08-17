@@ -74,7 +74,7 @@ def get_normal_time_periods(df_fault_timestamps: pd.DataFrame, current_index: in
     if current_index > 0:
         prev_row = df_fault_timestamps.iloc[current_index - 1]
         prev_end = prev_row['end_timestamp']
-        # 正常时间段：上一个故障结束 到 当前故障开始
+        # 正常时间段：上一个故障结束后10分钟 到 当前故障开始
         normal_periods.append((prev_end + 10 * 60 * 1_000_000_000, current_start))
         # normal_periods.append((prev_end , current_start))
 
