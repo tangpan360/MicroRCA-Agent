@@ -1047,16 +1047,16 @@ def create_combined_node_prompt_with_service_analysis(node_analysis_results: Dic
             fault_stats = metric_stats.get('fault_period')
 
             if normal_stats is not None and fault_stats is not None:
-                normal_mean = normal_stats.get('mean', 0)
-                normal_std = normal_stats.get('std', 0)
-                normal_max = normal_stats.get('max', 0)
+                # normal_mean = normal_stats.get('mean', 0)
+                # normal_std = normal_stats.get('std', 0)
+                # normal_max = normal_stats.get('max', 0)
                 normal_p99 = normal_stats.get('99%', 0)
                 normal_p50 = normal_stats.get('50%', 0)
-                fault_mean = fault_stats.get('mean', 0)
-                fault_std = fault_stats.get('std', 0)
-                fault_max = fault_stats.get('max', 0)
-                fault_nzr = fault_stats.get('non_zero_ratio',0)
-                normal_nzr = normal_stats.get('non_zero_ratio', 0)
+                # fault_mean = fault_stats.get('mean', 0)
+                # fault_std = fault_stats.get('std', 0)
+                # fault_max = fault_stats.get('max', 0)
+                # fault_nzr = fault_stats.get('non_zero_ratio',0)
+                # normal_nzr = normal_stats.get('non_zero_ratio', 0)
                 fault_p99 = fault_stats.get('99%', 0)
                 fault_p50 = fault_stats.get('50%', 0)
                 normal_p75 = normal_stats.get('75%', 0)
@@ -1073,7 +1073,7 @@ def create_combined_node_prompt_with_service_analysis(node_analysis_results: Dic
                 p99_symmetric_ratio = abs(fault_p99 - normal_p99) / (
                         (fault_p99 + normal_p99) / 2 + 1e-9
                 )
-                # 过滤阈值（建议 0.5 或 1，根据需求调整）
+                # 过滤阈值（建议 0.05 根据需求调整,过大将导致过多信息被视为正常）
                 if p50_symmetric_ratio < 0.05 and p99_symmetric_ratio <0.05:
                     continue
 
@@ -1098,24 +1098,24 @@ def create_combined_node_prompt_with_service_analysis(node_analysis_results: Dic
                 fault_stats = metric_stats.get('fault_period')
 
                 if normal_stats is not None and fault_stats is not None:
-                    normal_mean = normal_stats.get('mean', 0)
-                    normal_std = normal_stats.get('std', 0)
-                    normal_max = normal_stats.get('max', 0)
+                    # normal_mean = normal_stats.get('mean', 0)
+                    # normal_std = normal_stats.get('std', 0)
+                    # normal_max = normal_stats.get('max', 0)
                     normal_p99 = normal_stats.get('99%', 0)
                     normal_p50 = normal_stats.get('50%', 0)
                     normal_p25 = normal_stats.get('25%', 0)
                     normal_p75 = normal_stats.get('75%', 0)
-                    fault_mean = fault_stats.get('mean', 0)
-                    fault_std = fault_stats.get('std', 0)
-                    fault_max = fault_stats.get('max', 0)
+                    # fault_mean = fault_stats.get('mean', 0)
+                    # fault_std = fault_stats.get('std', 0)
+                    # fault_max = fault_stats.get('max', 0)
                     fault_p99 = fault_stats.get('99%', 0)
                     fault_p50 = fault_stats.get('50%', 0)
                     fault_p25 = fault_stats.get('25%', 0)
                     fault_p75 = fault_stats.get('75%', 0)
                     normal_iqr = normal_p75 - normal_p25
                     fault_iqr = fault_p75 - fault_p25
-                    fault_nzr = fault_stats.get('non_zero_ratio', 0)
-                    normal_nzr = normal_stats.get('non_zero_ratio', 0)
+                    # fault_nzr = fault_stats.get('non_zero_ratio', 0)
+                    # normal_nzr = normal_stats.get('non_zero_ratio', 0)
                     # 计算对称比率
                     p50_symmetric_ratio = abs(fault_p50 - normal_p50) / (
                             (fault_p50 + normal_p50) / 2 + 1e-9
@@ -1123,7 +1123,7 @@ def create_combined_node_prompt_with_service_analysis(node_analysis_results: Dic
                     p99_symmetric_ratio = abs(fault_p99 - normal_p99) / (
                             (fault_p99 + normal_p99) / 2 + 1e-9
                     )
-                    # 过滤阈值（建议 0.5 或 1，根据需求调整）
+                    # 过滤阈值（建议 0.05 根据需求调整,过大将导致过多信息被视为正常）
                     if p50_symmetric_ratio < 0.05 and p99_symmetric_ratio < 0.05:
                         continue
 
@@ -1559,24 +1559,24 @@ def create_combined_service_prompt_with_tidb(service_analysis_results: Dict, tid
                     fault_desc = fault_stats.get(metric)
 
                     if normal_desc is not None and fault_desc is not None:
-                        normal_mean = normal_desc.get('mean', 0)
-                        normal_std = normal_desc.get('std', 0)
-                        normal_max = normal_desc.get('max', 0)
+                        # normal_mean = normal_desc.get('mean', 0)
+                        # normal_std = normal_desc.get('std', 0)
+                        # normal_max = normal_desc.get('max', 0)
                         normal_p99 = normal_desc.get('99%', 0)
                         normal_p50 = normal_desc.get('50%', 0)
                         normal_p25 = normal_desc.get('25%', 0)
                         normal_p75 = normal_desc.get('75%', 0)
-                        fault_mean = fault_desc.get('mean', 0)
-                        fault_std = fault_desc.get('std', 0)
-                        fault_max = fault_desc.get('max', 0)
+                        # fault_mean = fault_desc.get('mean', 0)
+                        # fault_std = fault_desc.get('std', 0)
+                        # fault_max = fault_desc.get('max', 0)
                         fault_p99 = fault_desc.get('99%', 0)
                         fault_p50 = fault_desc.get('50%', 0)
                         fault_p25 = fault_desc.get('25%', 0)
                         fault_p75 = fault_desc.get('75%', 0)
                         normal_iqr = normal_p75 - normal_p25
                         fault_iqr = fault_p75 - fault_p25
-                        fault_nzr = fault_desc.get('non_zero_ratio', 0)
-                        normal_nzr = normal_desc.get('non_zero_ratio', 0)
+                        # fault_nzr = fault_desc.get('non_zero_ratio', 0)
+                        # normal_nzr = normal_desc.get('non_zero_ratio', 0)
                         # 计算对称比率
                         p50_symmetric_ratio = abs(fault_p50 - normal_p50) / (
                                 (fault_p50 + normal_p50) / 2 + 1e-9
@@ -1584,7 +1584,7 @@ def create_combined_service_prompt_with_tidb(service_analysis_results: Dict, tid
                         p99_symmetric_ratio = abs(fault_p99 - normal_p99) / (
                                 (fault_p99 + normal_p99) / 2 + 1e-9
                         )
-                        # 过滤阈值（建议 0.5 或 1，根据需求调整）
+                        # 过滤阈值（建议 0.05 根据需求调整,过大将导致过多信息被视为正常）
                         if p50_symmetric_ratio < 0.05 and p99_symmetric_ratio < 0.05:
                             continue
 
@@ -1613,25 +1613,25 @@ def create_combined_service_prompt_with_tidb(service_analysis_results: Dict, tid
                 fault_stats = metric_stats.get('fault_period')
 
                 if normal_stats is not None and fault_stats is not None:
-                    normal_mean = normal_stats.get('mean', 0)
-                    normal_std = normal_stats.get('std', 0)
-                    normal_max = normal_stats.get('max', 0)
+                    # normal_mean = normal_stats.get('mean', 0)
+                    # normal_std = normal_stats.get('std', 0)
+                    # normal_max = normal_stats.get('max', 0)
                     normal_p99 = normal_stats.get('99%', 0)
                     normal_p50 = normal_stats.get('50%', 0)
                     normal_p25 = normal_stats.get('25%', 0)
                     normal_p75 = normal_stats.get('75%', 0)
 
-                    fault_mean = fault_stats.get('mean', 0)
-                    fault_std = fault_stats.get('std', 0)
-                    fault_max = fault_stats.get('max', 0)
+                    # fault_mean = fault_stats.get('mean', 0)
+                    # fault_std = fault_stats.get('std', 0)
+                    # fault_max = fault_stats.get('max', 0)
                     fault_p99 = fault_stats.get('99%', 0)
                     fault_p50 = fault_stats.get('50%', 0)
                     fault_p25 = fault_stats.get('25%', 0)
                     fault_p75 = fault_stats.get('75%', 0)
                     normal_iqr = normal_p75 - normal_p25
                     fault_iqr = fault_p75 - fault_p25
-                    fault_nzr = fault_stats.get('non_zero_ratio', 0)
-                    normal_nzr = normal_stats.get('non_zero_ratio', 0)
+                    # fault_nzr = fault_stats.get('non_zero_ratio', 0)
+                    # normal_nzr = normal_stats.get('non_zero_ratio', 0)
                     # 计算对称比率
                     p50_symmetric_ratio = abs(fault_p50 - normal_p50) / (
                             (fault_p50 + normal_p50) / 2 + 1e-9
@@ -1639,7 +1639,7 @@ def create_combined_service_prompt_with_tidb(service_analysis_results: Dict, tid
                     p99_symmetric_ratio = abs(fault_p99 - normal_p99) / (
                             (fault_p99 + normal_p99) / 2 + 1e-9
                     )
-                    # 过滤阈值（建议 0.5 或 1，根据需求调整）
+                    # 过滤阈值（建议 0.05 根据需求调整,过大将导致过多信息被视为正常）
                     if p50_symmetric_ratio < 0.05 and p99_symmetric_ratio < 0.05:
                         continue
 
