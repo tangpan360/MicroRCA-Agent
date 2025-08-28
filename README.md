@@ -347,3 +347,7 @@ num_processes = max(1, int(cpu_count() * 0.5))
 
 本项目参与的比赛为：**赛道一: 基于大模型智能体的微服务根因定位**  
 比赛官网：[CCF AIOps 2025 Challenge](https://challenge.aiops.cn/home/competition/1920410697896845344)
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=tangpan360/MicroRCA-Agent&type=Date)](https://www.star-history.com/#tangpan360/MicroRCA-Agent&Date)
