@@ -5,7 +5,7 @@ import pandas as pd
 import time
 from multiprocessing import Pool, cpu_count
 from collections import OrderedDict
-from agent.prompts import get_log_analysis_prompt, get_multimodal_analysis_prompt
+from agent.prompts import get_multimodal_analysis_prompt
 from utils.log_utils import load_filtered_log
 from utils.trace_utils import load_filtered_trace
 from utils.file_utils import load_result_jsonl, update_single_result, extract_json_from_text
