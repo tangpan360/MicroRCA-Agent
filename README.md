@@ -1,143 +1,147 @@
-# MicroRCA-Agent：基于大模型智能体的微服务根因定位方法
-## 2025 国际 AIOps 挑战赛（决赛 Top5，48.52分）
-## 项目概述
+# MicroRCA-Agent: LLM-Agent-Based Microservice Root Cause Analysis
 
-本项目是一个基于多模态数据分析的智能运维解决方案，能够处理日志(Log)、链路追踪(Trace)和指标(Metric)数据，通过大语言模型进行故障分析和根因定位。采用模块化架构设计，整体系统分为五个核心模块：数据预处理模块、日志故障抽取模块、追踪故障检测模块、指标故障总结模块和多模态根因分析模块。各模块间采用松耦合设计，通过函数封装进行数据交互，既保证了系统的整体性，又确保了各模块的独立性和可扩展性。
-输出包含component、reason、reasoning_trace的结构化根因分析结果，实现从现象观察到根因推理的完整闭环。
-![项目架构图](imgs/overview.png)
+English | [中文](README_zh.md)
 
+## 2025 International AIOps Challenge (Finals Top 5, 48.52 points)
 
+## Project Overview
 
+This project is an intelligent operations solution based on multi-modal data analysis, capable of processing Log, Trace, and Metric data for fault analysis and root cause localization through large language models. It adopts a modular architecture design with five core modules: data preprocessing module, log fault extraction module, trace fault detection module, metric fault summarization module, and multi-modal root cause analysis module. The modules are designed with loose coupling through function encapsulation for data interaction, ensuring both system integrity and module independence and scalability.
 
-## 文件结构说明
+The output contains structured root cause analysis results including component, reason, and reasoning_trace, achieving a complete closed loop from phenomenon observation to root cause reasoning.
+
+![Project Architecture](imgs/overview.png)
+
+## File Structure
 
 ```
-├── README.md              # 项目文档
-├── domain.conf           # 外网域名配置
-├── src/                  # 源代码目录
-│   ├── agent/           # 智能代理模块
-│   │   ├── __init__.py  # 包初始化文件
-│   │   ├── agents.py    # 代理实现
-│   │   ├── llm_config.py # LLM配置，在这里配置agent使用的模型列表
-│   │   └── prompts.py   # 提示词模板
-│   ├── utils/           # 工具模块
-│   │   ├── drain/       # Drain日志模板提取
-│   │   │   ├── drain_template_extractor.py # Drain模板提取器
-│   │   │   ├── drain3.ini              # Drain3配置文件
-│   │   │   ├── error_log-drain.pkl     # 预训练好的模板提取模型
-│   │   │   └── error_log-template.csv  # 日志模板文件
-│   │   ├── __init__.py  # 包初始化文件
-│   │   ├── file_utils.py # 文件处理工具
-│   │   ├── io_util.py   # IO工具
-│   │   ├── llm_record_utils.py # LLM记录工具
-│   │   ├── log_template_extractor.py # 日志模板提取器（训练errot_log-drain.pkl）
-│   │   ├── log_template_extractor_with_examples.py # 带示例的日志模板提取器（用于观察训练的drain提取效果）
-│   │   ├── log_utils.py # 日志处理工具（用于调用日志信息供大模型使用）
-│   │   ├── metric_utils.py # 指标处理工具（用于调用指标信息供大模型使用）
-│   │   └── trace_utils.py # 链路追踪处理工具（用于调用链路追踪信息供大模型使用）
-│   ├── models           # 模型（trace异常检测模型）
-│   ├── scripts/         # 数据预处理脚本，包括统一log、trace、metric的时间戳等操作
-│   │   ├── merge_phaseone_phasetwo_input_json.py # 将 phaseone 和 phasetwo 的 input.jsonl 合并成一个 input.jsonl 的脚本
-│   │   ├── raw_log_processor.py      # 原始日志处理
-│   │   ├── raw_metric_processor.py   # 原始指标处理
-│   │   └── raw_trace_processor.py    # 原始链路追踪处理
-│   ├── models/          # 模型文件
-│   │   ├── trace_detectors.pkl       # trace异常检测检测器模型
-│   │   └── trace_detectors_normal_stats.pkl # trace正常状态统计
-│   ├── input/           # 输入数据处理
-│   │   ├── extract_input_timestamp.py # 时间戳提取
-│   │   └── input_timestamp.csv       # 提取了输入的时间戳等信息，便于后期调用
-│   ├── submission/      # 提交结果
-│   │   ├── result.jsonl # 结果文件
-│   │   └── submit.py    # 提交脚本
-│   ├── main_multiprocessing.py # 主程序入口
-│   ├── preprocessing.sh # 数据预处理脚本（如果需要下载和预处理）
-│   └── requirements.txt # Python依赖
-├── data/                # 下载并且与处理好的数据文件目录
-├── Dockerfile          # Docker镜像构建文件
-└── run.sh              # 启动脚本
+├── README.md  # English project documentation
+├── README_zh.md  # Chinese project documentation
+├── domain.conf  # External domain configuration
+├── src/  # Source code directory
+│   ├── agent/  # Intelligent agent module
+│   │   ├── __init__.py  # Package initialization file
+│   │   ├── agents.py  # Agent implementation
+│   │   ├── llm_config.py  # LLM configuration for agent model list
+│   │   └── prompts.py  # Prompt templates
+│   ├── utils/  # Utility modules
+│   │   ├── drain/  # Drain log template extraction
+│   │   │   ├── drain_template_extractor.py  # Drain template extractor
+│   │   │   ├── drain3.ini  # Drain3 configuration file
+│   │   │   ├── error_log-drain.pkl  # Pre-trained template extraction model
+│   │   │   └── error_log-template.csv  # Log template file
+│   │   ├── __init__.py  # Package initialization file
+│   │   ├── file_utils.py  # File processing utilities
+│   │   ├── io_util.py  # IO utilities
+│   │   ├── llm_record_utils.py  # LLM record utilities
+│   │   ├── log_template_extractor.py  # Log template extractor (for training error_log-drain.pkl)
+│   │   ├── log_template_extractor_with_examples.py  # Log template extractor with examples
+│   │   ├── log_utils.py  # Log processing utilities
+│   │   ├── metric_utils.py  # Metric processing utilities
+│   │   └── trace_utils.py  # Trace processing utilities
+│   ├── models  # Models (trace anomaly detection models)
+│   ├── scripts/  # Data preprocessing scripts including timestamp unification for log, trace, metric
+│   │   ├── merge_phaseone_phasetwo_input_json.py  # Script to merge phaseone and phasetwo input.jsonl
+│   │   ├── raw_log_processor.py  # Raw log processing
+│   │   ├── raw_metric_processor.py  # Raw metric processing
+│   │   └── raw_trace_processor.py  # Raw trace processing
+│   ├── models/  # Model files
+│   │   ├── trace_detectors.pkl  # Trace anomaly detection model
+│   │   └── trace_detectors_normal_stats.pkl  # Trace normal state statistics
+│   ├── input/  # Input data processing
+│   │   ├── extract_input_timestamp.py  # Timestamp extraction
+│   │   └── input_timestamp.csv  # Extracted input timestamp information
+│   ├── submission/  # Submission results
+│   │   ├── result.jsonl  # Result file
+│   │   └── submit.py  # Submission script
+│   ├── main_multiprocessing.py  # Main program entry
+│   ├── preprocessing.sh  # Data preprocessing script
+│   └── requirements.txt  # Python dependencies
+├── data/  # Downloaded and preprocessed data files directory
+├── Dockerfile  # Docker image build file
+└── run.sh  # Startup script
 ```
 
-## 技术方案详述
+## Technical Solution Details
 
-### 1. 数据预处理
+### 1. Data Preprocessing
 
-#### 1.1 输入数据解析设计
-- **正则表达式提取策略**: 对原始故障描述文件进行结构化处理
-  - 接收JSON格式输入数据，包含故障描述（Anomaly Description）和唯一标识符（uuid）
-  - 时间戳提取机制：采用ISO 8601时间格式标准，通过正则表达式模式识别故障起止时间
-  - 时间索引生成：生成"年-月-日_时"格式的时间标识，用于快速定位数据文件
-  - 纳秒级时间戳转换：将故障时间转换为19位纳秒级时间戳
+#### 1.1 Input Data Parsing Design
+- **Regular Expression Extraction Strategy**: Structured processing of raw fault description files
+  - Receives JSON format input data containing Anomaly Description and unique identifier (uuid)
+  - Timestamp extraction mechanism: Uses ISO 8601 time format standard with regex pattern recognition for fault start/end times
+  - Time index generation: Generates "year-month-day_hour" format time identifiers for quick data file location
+  - Nanosecond-level timestamp conversion: Converts fault time to 19-digit nanosecond-level timestamps
 
-#### 1.2 多模态数据时间戳统一
-- **差异化时间戳统一处理策略**: 针对log、trace和metric三种数据的不同格式特点
-  - Log数据：采用ISO 8601格式的@timestamp字段，转换为统一的19位纳秒级时间戳
-  - Trace数据：startTime字段存储微秒级时间戳，通过精度转换扩展为纳秒级（乘以1000倍数）
-  - Metric数据：time字段遵循ISO 8601格式，采用递归搜索策略确保完整覆盖分散存储的指标文件
-- **时序一致性保障**: 处理完成后按时间戳升序排列，确保跨模态时间基准的标准化
+#### 1.2 Multi-modal Data Timestamp Unification
+- **Differentiated Timestamp Unification Strategy**: Targets different format characteristics of log, trace, and metric data
+  - Log data: Uses ISO 8601 format @timestamp field, converts to unified 19-digit nanosecond-level timestamps
+  - Trace data: startTime field stores microsecond-level timestamps, extends to nanosecond-level through precision conversion (multiply by 1000)
+  - Metric data: time field follows ISO 8601 format, uses recursive search strategy to ensure complete coverage of distributed metric files
+- **Temporal Consistency Guarantee**: After processing, sorts by timestamp in ascending order to ensure standardized cross-modal time baseline
 
-### 2. 多模态数据处理
+### 2. Multi-modal Data Processing
 
-#### 2.1 日志数据处理
-- **Drain3 算法**: 基于包含error的日志训练Drain3模型，并使用预训练的Drain3模型(`error_log-drain.pkl`)进行日志模板提取
-  - 自动识别日志模式，将相似的日志归类到同一模板
-  - 大幅减少日志数据量，提取关键错误信息
-  - 用于日志去重和频次统计
-- **多层级数据筛选处理流程**:
-  - 文件定位：根据时间信息精准匹配故障时间窗口内的日志文件
-  - 时间窗过滤：基于纳秒级时间戳进行严格的时间边界筛选
-  - Error关键词过滤：提取包含error信息的日志条目，过滤正常业务日志
-  - 核心字段提取：提取时间、容器、节点和错误消息等关键信息
-  - 故障模板匹配：利用预训练Drain模型进行模板匹配与标准化
-  - 样本去重统计：对重复日志去重并统计频次，评估故障严重程度
-  - 服务信息提取：将Pod信息映射为service，重构为标准化格式
+#### 2.1 Log Data Processing
+- **Drain3 Algorithm**: Trains Drain3 model based on error-containing logs and uses pre-trained Drain3 model (`error_log-drain.pkl`) for log template extraction
+  - Automatically identifies log patterns, categorizes similar logs into the same template
+  - Significantly reduces log data volume, extracts key error information
+  - Used for log deduplication and frequency statistics
+- **Multi-level Data Filtering Processing Pipeline**:
+  - File location: Precisely matches log files within fault time windows based on time information
+  - Time window filtering: Strict time boundary filtering based on nanosecond-level timestamps
+  - Error keyword filtering: Extracts log entries containing error information, filters normal business logs
+  - Core field extraction: Extracts key information such as time, container, node, and error messages
+  - Fault template matching: Uses pre-trained Drain model for template matching and standardization
+  - Sample deduplication statistics: Deduplicates repeated logs and counts frequencies to assess fault severity
+  - Service information extraction: Maps Pod information to services, reconstructs into standardized format
 
-#### 2.2 链路追踪 (Trace) 处理
-- **双重异常检测策略**: 结合性能维度和状态维度识别微服务调用链中的异常模式
-  - Duration异常检测：基于IsolationForest算法检测调用时延异常
-  - Status状态检测：直接检查status.code和status.message识别错误状态
-- **IsolationForest性能异常检测**:
-  - 预训练模型存储：`trace_detectors.pkl` 和 `trace_detectors_normal_stats.pkl`
-  - 基于故障恢复后40分钟正常期数据训练，按"parent_pod-child_pod-操作名称"分组训练
-  - 采用30秒滑动窗口处理duration特征，设置1%异常污染率
-- **状态码直接检查机制**:
-  - 解析trace tags中的status.code和status.message字段
-  - 通过条件过滤（status.code≠0）直接识别异常状态调用
-  - 提供确定性的错误状态识别和详细错误信息
-- **调用关系映射**: 提取pod_name、service_name、node_name，建立完整的调用链父子关系
-- **结构化输出**: 分别输出前20个duration异常和status异常组合，包含节点、服务、容器、操作等维度信息
+#### 2.2 Trace Processing
+- **Dual Anomaly Detection Strategy**: Combines performance and status dimensions to identify anomaly patterns in microservice call chains
+  - Duration anomaly detection: Uses IsolationForest algorithm to detect call latency anomalies
+  - Status detection: Directly checks status.code and status.message to identify error states
+- **IsolationForest Performance Anomaly Detection**:
+  - Pre-trained model storage: `trace_detectors.pkl` and `trace_detectors_normal_stats.pkl`
+  - Trained on 40-minute normal period data after fault recovery, grouped by "parent_pod-child_pod-operation_name"
+  - Uses 30-second sliding window to process duration features with 1% anomaly contamination rate
+- **Status Code Direct Check Mechanism**:
+  - Parses status.code and status.message fields in trace tags
+  - Directly identifies anomalous status calls through conditional filtering (status.code≠0)
+  - Provides deterministic error status identification and detailed error information
+- **Call Relationship Mapping**: Extracts pod_name, service_name, node_name to establish complete call chain parent-child relationships
+- **Structured Output**: Separately outputs top 20 duration anomalies and status anomaly combinations, including node, service, container, operation dimensions
 
-#### 2.3 指标数据 (Metric) 处理
-- **双层级大模型现象总结策略**: 基于大语言模型的智能现象识别与归纳分析
-  - 第一层：应用性能监控现象识别与总结（APM指标+TiDB数据库组件指标）
-  - 第二层：基础设施机器性能指标综合现象总结与关联分析
-- **多层级监控指标体系**:
-  - APM业务监控：7个核心指标（error_ratio、request、response、rrt、timeout等）
-  - Pod容器层：9个基础设施指标（cpu_usage、memory、network、filesystem等）
-  - Node节点层：16个基础设施指标（cpu、memory、disk、network、TCP连接等）
-  - TiDB数据库：3个组件共20个专项指标（query、duration、connection、raft等）
-- **智能数据筛选与处理**:
-  - 正常时间段定义：故障前后相邻时间窗口，前一故障结束后10分钟至当前故障开始前，以及当前故障结束后10分钟至下一故障开始前，避免故障"余波"影响
-  - 统计对称比率筛选：自动过滤变化幅度小于5%的稳定指标
-  - 异常值移除：移除最大最小各2个极值，构建稳定统计基线
-  - Pod-Service统一分析：通过Pod名称自动提取Service标识
-- **llm总结输出内容**:
-  - 应用性能异常现象：服务级别整体趋势和Pod级别个体差异
-  - 基础设施机器性能异常现象：跨容器和节点的资源状态变化
-  - 跨层级关联现象模式：异常分布特征和传播路径识别
+#### 2.3 Metric Data Processing
+- **Dual-level LLM Phenomenon Summarization Strategy**: Intelligent phenomenon identification and inductive analysis based on large language models
+  - First level: Application performance monitoring phenomenon identification and summarization (APM metrics + TiDB database component metrics)
+  - Second level: Infrastructure machine performance metrics comprehensive phenomenon summarization and correlation analysis
+- **Multi-level Monitoring Metrics System**:
+  - APM business monitoring: 7 core metrics (error_ratio, request, response, rrt, timeout, etc.)
+  - Pod container level: 9 infrastructure metrics (cpu_usage, memory, network, filesystem, etc.)
+  - Node level: 16 infrastructure metrics (cpu, memory, disk, network, TCP connections, etc.)
+  - TiDB database: 3 components with 20 specialized metrics (query, duration, connection, raft, etc.)
+- **Intelligent Data Filtering and Processing**:
+  - Normal time period definition: Adjacent time windows before and after faults, from 10 minutes after previous fault end to current fault start, and from 10 minutes after current fault end to next fault start, avoiding fault "aftershock" effects
+  - Statistical symmetry ratio filtering: Automatically filters stable metrics with change amplitude less than 5%
+  - Outlier removal: Removes maximum and minimum 2 extreme values each to build stable statistical baseline
+  - Pod-Service unified analysis: Automatically extracts Service identifiers through Pod names
+- **LLM Summary Output Content**:
+  - Application performance anomaly phenomena: Service-level overall trends and Pod-level individual differences
+  - Infrastructure machine performance anomaly phenomena: Cross-container and node resource state changes
+  - Cross-level correlation phenomenon patterns: Anomaly distribution characteristics and propagation path identification
 
-### 3. 高性能处理
+### 3. High-Performance Processing
 
-#### 3.1 并行计算
-- **多进程架构**: 基于CPU核心数动态调整进程池大小(默认0.5倍核心数)
-- **任务分片**: 将故障时间段分片并行处理
+#### 3.1 Parallel Computing
+- **Multi-process Architecture**: Dynamically adjusts process pool size based on CPU core count (default 0.5x core count)
+- **Task Partitioning**: Partitions fault time periods for parallel processing
 
-#### 3.2 容错机制
-- **重试策略**: 每个时间段最多重试3次处理
-- **异常隔离**: 单个时间段处理失败不影响整体流程
-- **数据缺失容忍**: 某些类型的数据（如log、trace或metric）缺失时，系统仍可利用现有数据继续进行分析
+#### 3.2 Fault Tolerance Mechanism
+- **Retry Strategy**: Maximum 3 retry attempts per time period
+- **Exception Isolation**: Single time period processing failure doesn't affect overall pipeline
+- **Data Missing Tolerance**: When certain types of data (log, trace, or metric) are missing, the system can continue analysis using available data
 
-### 4. 根因结果输出示例（字段组合视任务而定）:
+### 4. Root Cause Result Output Example:
 ```bash
 {
   "uuid": "33c11d00-2",
@@ -161,118 +165,117 @@
     }
   ]
 }
-   ```
-## 前置依赖安装
+```
 
-### Git LFS 安装（必需）
+## Prerequisites Installation
 
-由于项目数据集和权重文件使用Git LFS进行管理，运行前需要先安装并配置Git LFS。
+### Git LFS Installation (Required)
 
-#### 🐧 在 Ubuntu 上安装 Git LFS
+Since the project dataset and weight files are managed using Git LFS, you need to install and configure Git LFS before running.
 
-**✅ 步骤 1：添加 Git LFS 的仓库**
+#### 🐧 Installing Git LFS on Ubuntu
+
+**✅ Step 1: Add Git LFS Repository**
 ```bash
 curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash
 ```
-这个命令会自动添加 Git LFS 的官方 APT 源。
+This command automatically adds the official Git LFS APT source.
 
-**✅ 步骤 2：安装 Git LFS**
+**✅ Step 2: Install Git LFS**
 ```bash
 sudo apt-get install git-lfs
 ```
 
-**✅ 步骤 3：初始化 Git LFS**
-安装完成后，运行以下命令来启用 Git LFS：
+**✅ Step 3: Initialize Git LFS**
+After installation, run the following command to enable Git LFS:
 ```bash
 git lfs install
 ```
-这将配置 Git 以支持 LFS 功能。
+This will configure Git to support LFS functionality.
 
-**🔍 验证是否成功安装 Git LFS**
-通过以下命令验证是否正确安装并启用了 Git LFS：
+**🔍 Verify Git LFS Installation**
+Verify that Git LFS is correctly installed and enabled:
 ```bash
 git lfs version
 ```
-输出示例：
+Example output:
 ```
 git-lfs/3.6.1 (GitHub; linux amd64; go 1.23.3)
 ```
 
-### Python 依赖安装（必需）
+### Python Dependencies Installation (Required)
 
-项目的数据预处理脚本（`src/preprocessing.sh`中调用的Python脚本）需要使用`src/requirements.txt`中指定的依赖包。
+The project's data preprocessing scripts (Python scripts called in `src/preprocessing.sh`) require dependencies specified in `src/requirements.txt`.
 
-**✅ 创建conda环境并安装依赖**
+**✅ Create conda environment and install dependencies**
 
 ```bash
-# 创建Python 3.10环境
+# Create Python 3.10 environment
 conda create -n microrca python=3.10
 
-# 激活环境
+# Activate environment
 conda activate microrca
 
-# 进入项目目录并安装依赖
+# Enter project directory and install dependencies
 cd MicroRCA-Agent
 pip install -r src/requirements.txt
 ```
 
-**⚠️ 注意事项**
-- 预处理阶段必须先安装这些依赖，否则会导致数据处理脚本执行失败
-- 其他安装环境依赖的方式（如virtualenv、pipenv等）可以根据个人习惯自行配置
+**⚠️ Important Notes**
+- Dependencies must be installed before preprocessing stage, otherwise data processing scripts will fail
+- Other dependency installation methods (such as virtualenv, pipenv, etc.) can be configured according to personal preferences
 
+## Configuration
 
-## 配置说明
+### Environment Variables
 
-### 环境变量
+Please add your own DeepSeek official API keys by configuring the following environment variables in the `src/.env` file:
 
-请添加自己的 deepseek 官方API密钥，通过 `src/.env` 文件配置以下环境变量：
+- `KEJIYUN_API_KEY`: LLM API key
+- `KEJIYUN_API_BASE`: LLM API base address
 
-- `KEJIYUN_API_KEY`: LLM API密钥
-- `KEJIYUN_API_BASE`: LLM API基础地址
+### Model Configuration
 
-### 模型配置
+You need to set the models to use in `src/agent/llm_config.py`. The default enabled model is `deepseek-chat`. If you need to use other models, please add them yourself.
 
-需要在 `src/agent/llm_config.py` 中设置要使用的模型。默认启用 `deepseek-chat` 模型，如需使用其他模型，请自行添加：
+## Usage
 
+### Quick Start
 
-## 运行方式
-
-### 快速启动
-
-**⚠️ 重要提醒：运行前请确保已完成上述配置！**
+**⚠️ Important Reminder: Make sure you have completed the above configuration before running!**
 
 ```bash
 bash run.sh
 ```
 
-## 可能遇到的问题及解决方案
+## Troubleshooting
 
-### 1. Docker相关问题
+### 1. Docker Related Issues
 
-**问题**: Docker服务未运行
+**Problem**: Docker service not running
 ```
-错误: Docker 服务未运行或权限不足
+Error: Docker service not running or insufficient permissions
 ```
 
-**解决方案**:
+**Solution**:
 ```bash
-# 启动Docker服务
+# Start Docker service
 sudo systemctl start docker
 
-# 将用户添加到docker组
+# Add user to docker group
 sudo usermod -aG docker $USER
-# 重新登录或执行
+# Re-login or execute
 newgrp docker
 ```
 
-**问题**: Docker镜像构建失败
+**Problem**: Docker image build failure
 ```
-错误: Docker 镜像构建失败
+Error: Docker image build failed
 ```
 
-**解决方案**:
+**Solution**:
 
-1. 配置加速器
+1. Configure accelerator
 
 ```bash
 sudo tee /etc/docker/daemon.json <<-'EOF'
@@ -300,42 +303,41 @@ sudo tee /etc/docker/daemon.json <<-'EOF'
 EOF
 ```
 
-2. 重启 Docker 服务
+2. Restart Docker service
 
 ```bash
 sudo systemctl daemon-reload
 sudo systemctl restart docker
-
 ```
 
-### 2. 网络连接问题
+### 2. Network Connection Issues
 
-**问题**: LLM API访问失败
+**Problem**: LLM API access failure
 
-**解决方案**:
-- 检查 src/.env 文件中环境变量 `KEJIYUN_API_KEY` 和 `KEJIYUN_API_BASE` 是否正确配置（默认使用的队伍 api）
+**Solution**:
+- Check if environment variables `KEJIYUN_API_KEY` and `KEJIYUN_API_BASE` in the `src/.env` file are correctly configured
 
-### 3. 内存不足问题
+### 3. Memory Shortage Issues
 
-**问题**: 容器运行时内存不足导致程序崩溃，机器卡死
+**Problem**: Container crashes due to insufficient memory, system freeze
 
-**解决方案**:
-- 建议可以手动修改多进程数量，在src/main_multiprocessing.py中调整进程池大小（默认使用50%的核心数），但是如果内存太小可能导致爆满导致机器卡死，请关注内存使用情况，如果爆满，请将其修改至合适的比例:
+**Solution**:
+- You can manually modify the number of processes. Adjust the process pool size in `src/main_multiprocessing.py` (default uses 50% of core count). However, if memory is too small, it may cause overflow and system freeze. Please monitor memory usage. If it overflows, please modify to an appropriate ratio:
 ```python
 num_processes = max(1, int(cpu_count() * 0.5))
 ```
 
-## 注意事项
+## Important Notes
 
-1. 确保所有依赖的外部服务（LLM API）可正常访问
-2. 建议在性能较好的机器上运行，处理大量数据时可能需要较长时间
+1. Ensure all dependent external services (LLM API) are accessible
+2. Recommend running on high-performance machines, as processing large amounts of data may take considerable time
 
-## 致谢
+## Acknowledgments
 
-感谢CCF AIOps 2025挑战赛组委会提供的高质量数据集和良好的竞赛环境，为我们团队提供了宝贵的学习和交流平台。
+Thanks to the CCF AIOps 2025 Challenge organizing committee for providing high-quality datasets and a good competition environment, offering our team a valuable learning and exchange platform.
 
-本项目参与的比赛为：**赛道一: 基于大模型智能体的微服务根因定位**  
-比赛官网：[CCF AIOps 2025 Challenge](https://challenge.aiops.cn/home/competition/1920410697896845344)
+This project participated in: **Track 1: LLM-Agent-Based Microservice Root Cause Analysis**  
+Competition website: [CCF AIOps 2025 Challenge](https://challenge.aiops.cn/home/competition/1920410697896845344)
 
 ## Star History
 
