@@ -21,7 +21,7 @@ def process_single_attempt(index, row, df_input_timestamp, uuid, log_agent, atte
     # 加载三种模态的数据
     log_data = None
     trace_data = None
-    metric_data = None  # 暂时为None，等待metric_utils实现
+    metric_data = None
     
     # 尝试加载日志数据
     try:
