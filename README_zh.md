@@ -250,6 +250,67 @@ pip install -r src/requirements.txt
 bash run.sh
 ```
 
+## 评测提交与结果查询
+
+### 🏆 评测平台
+本项目参与的是**CCF AIOps 2025 挑战赛**中的"基于大模型智能体的微服务根因定位"赛道。
+
+**官方评测平台**：[https://challenge.aiops.cn/home/competition/1963605668447416345](https://challenge.aiops.cn/home/competition/1963605668447416345)
+
+### 📋 评测流程
+
+#### **步骤 1：平台注册与登录**
+1. 访问[评测平台](https://challenge.aiops.cn/home/competition/1963605668447416345)并完成账号注册
+2. 登录后进入"基于大模型智能体的微服务根因定位"比赛页面
+
+#### **步骤 2：获取团队标识**
+1. 登录成功后，点击页面顶部的"**团队**"选项卡
+2. 在团队信息页面找到并复制您的"**团队ID**"
+
+#### **步骤 3：配置提交凭证**
+编辑 `submission/submit.py` 文件，找到 `TICKET` 变量并替换为您的团队ID：
+```python
+TICKET = "your_team_id_here"  # 请将此处替换为您的实际团队ID
+```
+
+#### **步骤 4：运行算法生成预测结果**
+在项目根目录执行主程序：
+```bash
+bash run.sh
+```
+> ⏱️ 程序运行完成后，会在项目根目录自动生成 `result.jsonl` 文件
+
+#### **步骤 5：准备提交文件**
+将生成的结果文件移动到提交目录：
+```bash
+cp result.jsonl submission/result.jsonl
+```
+
+#### **步骤 6：执行结果提交**
+切换到提交目录并运行提交脚本：
+```bash
+cd submission
+python submit.py
+```
+
+**✅ 提交成功示例**：
+```
+Success! Your submission ID is 1757931486600
+```
+> 📝 请记录这个submission ID，用于后续查询评分结果
+
+#### **步骤 7：查询评测成绩**
+使用获得的submission ID查询评分：
+```bash
+python submit.py -i 1757931486600
+```
+
+**📊 评分结果示例**：
+```
+Submission 1757931486600 score: 0.3275
+```
+> 🎯 分数越接近1.0表示预测准确性越高
+
 ## 可能遇到的问题及解决方案
 
 ### 1. Docker相关问题

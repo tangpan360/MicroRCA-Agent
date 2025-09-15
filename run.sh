@@ -112,9 +112,9 @@ if [ ! -f "./output/result.jsonl" ]; then
 fi
 
 # 复制结果为最终答案文件
-cp ./output/result.jsonl ./answer.json
+cp ./output/result.jsonl ./result.jsonl
 
-echo "=== 答案文件已生成: answer.json ==="
+echo "=== 答案文件已生成: result.jsonl ==="
 
 # 可选：在成功完成后清理Docker镜像以节省空间
 # 取消注释下面的行来启用自动清理

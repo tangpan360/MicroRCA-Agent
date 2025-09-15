@@ -248,6 +248,67 @@ You need to set the models to use in `src/agent/llm_config.py`. The default enab
 bash run.sh
 ```
 
+## Evaluation Submission and Result Query
+
+### 🏆 Evaluation Platform
+This project participates in the **CCF AIOps 2025 Challenge** in the "LLM-Agent-Based Microservice Root Cause Analysis" track.
+
+**Official Evaluation Platform**: [https://challenge.aiops.cn/home/competition/1963605668447416345](https://challenge.aiops.cn/home/competition/1963605668447416345)
+
+### 📋 Evaluation Process
+
+#### **Step 1: Platform Registration and Login**
+1. Visit the [evaluation platform](https://challenge.aiops.cn/home/competition/1963605668447416345) and complete account registration
+2. After login, enter the "LLM-Agent-Based Microservice Root Cause Analysis" competition page
+
+#### **Step 2: Obtain Team Identifier**
+1. After successful login, click the "**Team**" tab at the top of the page
+2. Find and copy your "**Team ID**" from the team information page
+
+#### **Step 3: Configure Submission Credentials**
+Edit the `submission/submit.py` file, find the `TICKET` variable and replace it with your team ID:
+```python
+TICKET = "your_team_id_here"  # Please replace this with your actual team ID
+```
+
+#### **Step 4: Run Algorithm to Generate Prediction Results**
+Execute the main program in the project root directory:
+```bash
+bash run.sh
+```
+> ⏱️ After the program completes, a `result.jsonl` file will be automatically generated in the project root directory
+
+#### **Step 5: Prepare Submission File**
+Move the generated result file to the submission directory:
+```bash
+cp result.jsonl submission/result.jsonl
+```
+
+#### **Step 6: Execute Result Submission**
+Switch to the submission directory and run the submission script:
+```bash
+cd submission
+python submit.py
+```
+
+**✅ Successful Submission Example**:
+```
+Success! Your submission ID is 1757931486600
+```
+> 📝 Please record this submission ID for subsequent score queries
+
+#### **Step 7: Query Evaluation Score**
+Use the obtained submission ID to query the score:
+```bash
+python submit.py -i 1757931486600
+```
+
+**📊 Score Result Example**:
+```
+Submission 1757931486600 score: 0.3275
+```
+> 🎯 The closer the score is to 1.0, the higher the prediction accuracy
+
 ## Troubleshooting
 
 ### 1. Docker Related Issues
