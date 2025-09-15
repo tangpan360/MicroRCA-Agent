@@ -23,34 +23,43 @@ def process_single_attempt(index, row, df_input_timestamp, uuid, log_agent, atte
     trace_data = None
     metric_data = None
     
-    # 尝试加载日志数据
-    try:
-        log_result = load_filtered_log(df_input_timestamp, index)
-        if log_result is not None:
-            log_data = log_result
-            print(f"成功加载日志数据")
-    except Exception as e:
-        print(f"加载日志数据失败: {e}")
+    # 根据消融实验配置决定是否加载日志数据
+    if USE_LOG:
+        try:
+            log_result = load_filtered_log(df_input_timestamp, index)
+            if log_result is not None:
+                log_data = log_result
+                print(f"成功加载日志数据")
+        except Exception as e:
+            print(f"加载日志数据失败: {e}")
+    else:
+        print(f"消融实验：跳过日志数据加载")
     
-    # 尝试加载trace数据
-    try:
-        trace_result = load_filtered_trace(df_input_timestamp, index)
-        if trace_result is not None and trace_result[0]:  # 检查CSV不为空
-            trace_data = trace_result
-            print(f"成功加载trace数据")
-    except Exception as e:
-        print(f"加载trace数据失败: {e}")
+    # 根据消融实验配置决定是否加载trace数据
+    if USE_TRACE:
+        try:
+            trace_result = load_filtered_trace(df_input_timestamp, index)
+            if trace_result is not None and trace_result[0]:  # 检查CSV不为空
+                trace_data = trace_result
+                print(f"成功加载trace数据")
+        except Exception as e:
+            print(f"加载trace数据失败: {e}")
+    else:
+        print(f"消融实验：跳过trace数据加载")
     
     print(f"trace数据处理完毕，准备生成多模态prompt，uuid={uuid}, attempt={attempt_num}")
-    # 尝试加载metric数据
-    try:
-        from utils.metric_utils import analyze_fault_comprehensive
-        metric_result = analyze_fault_comprehensive(df_input_timestamp, index, uuid)
-        if metric_result:
-            metric_data = metric_result  # 注意：这里是字符串类型，不是tuple
-            print(f"成功加载metric数据")
-    except Exception as e:
-        print(f"加载metric数据失败: {e}")
+    # 根据消融实验配置决定是否加载metric数据
+    if USE_METRIC:
+        try:
+            from utils.metric_utils import analyze_fault_comprehensive
+            metric_result = analyze_fault_comprehensive(df_input_timestamp, index, uuid)
+            if metric_result:
+                metric_data = metric_result  # 注意：这里是字符串类型，不是tuple
+                print(f"成功加载metric数据")
+        except Exception as e:
+            print(f"加载metric数据失败: {e}")
+    else:
+        print(f"消融实验：跳过metric数据加载")
     
     # 检查是否至少有一种模态的数据
     if log_data is None and trace_data is None and metric_data is None:
@@ -141,7 +150,45 @@ def process_input_csv(args):
         return None
 
 # 主函数
-def main():    
+def main():
+    # 消融实验配置 - 在这里修改要使用的模态数据
+    global USE_LOG, USE_TRACE, USE_METRIC
+    
+    # ====== 消融实验配置区域 ======
+    # 消融实验示例：
+    # - 只使用Log: USE_LOG=True, USE_TRACE=False, USE_METRIC=False
+    # - 只使用Trace: USE_LOG=False, USE_TRACE=True, USE_METRIC=False  
+    # - 只使用Metric: USE_LOG=False, USE_TRACE=False, USE_METRIC=True
+    # - Log+Trace: USE_LOG=True, USE_TRACE=True, USE_METRIC=False
+    # - Log+Metric: USE_LOG=True, USE_TRACE=False, USE_METRIC=True
+    # - Trace+Metric: USE_LOG=False, USE_TRACE=True, USE_METRIC=True
+    # - 全模态: USE_LOG=True, USE_TRACE=True, USE_METRIC=True
+    
+    USE_LOG = True      # 是否使用日志数据
+    USE_TRACE = True    # 是否使用链路追踪数据
+    USE_METRIC = True   # 是否使用指标数据
+    # ============================
+    
+    # 打印当前消融实验配置
+    print("=" * 60)
+    print("消融实验配置:")
+    print(f"  使用日志数据 (Log): {USE_LOG}")
+    print(f"  使用链路追踪数据 (Trace): {USE_TRACE}")
+    print(f"  使用指标数据 (Metric): {USE_METRIC}")
+    
+    # 获取启用的模态列表
+    enabled_modalities = []
+    if USE_LOG: enabled_modalities.append("Log")
+    if USE_TRACE: enabled_modalities.append("Trace")
+    if USE_METRIC: enabled_modalities.append("Metric")
+    
+    if enabled_modalities:
+        print(f"  当前实验使用模态: {' + '.join(enabled_modalities)}")
+    else:
+        print("  警告：所有模态都被禁用！")
+        return
+    print("=" * 60)
+    
     # 使用绝对路径构建input_timestamp.csv的路径
     project_root = os.path.dirname(os.path.abspath(__file__))
     input_path = os.path.join(project_root, 'input', 'input_timestamp.csv')
