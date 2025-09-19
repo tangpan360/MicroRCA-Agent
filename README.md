@@ -167,6 +167,16 @@ The output contains structured root cause analysis results including component, 
 }
 ```
 
+### 5. Advanced Optimization Recommendations for the Solution
+
+The current project has implemented a multimodal data-driven root cause localization solution. However, further improvement of the root cause localization accuracy requires in-depth integration of domain knowledge in the operation and maintenance (O&M) scenario. It should be noted that higher-performing solutions often incorporate the accumulated O&M experience of enterprises, such as defining key indicators for core businesses, designing standardized SOPs (Standard Operating Procedures) for fault diagnosis, and building a knowledge base of O&M experience documents. These resources are not available to non-professional O&M teams.
+
+If you have access to relevant O&M resources and implementation conditions, you can optimize the current solution in the following directions, which will significantly improve the accuracy of root cause localization:
+
+- **Precise Indicator Filtering**: Based on specific business scenarios (e.g., e-commerce transactions, financial payments), filter core indicators sensitive to faults (e.g., transaction success rate, payment response latency). This reduces the interference of non-critical indicators on LLM (Large Language Model) analysis.
+- **SOP Process Validation**: Embed the mature fault diagnosis SOPs of the O&M team (e.g., "Check infrastructure first → then verify service calls → finally review business logs") into the LLM prompt logic. This guides the intelligent agent to reason in accordance with standardized pathways.
+- **O&M Document RAG Optimization**: Establish a knowledge base of O&M experience documents (e.g., historical fault cases, component fault manuals). Leverage RAG (Retrieval-Augmented Generation) technology to enable the LLM to reference historical experience during analysis, thereby enhancing the accuracy and efficiency of reasoning.
+
 ## Prerequisites Installation
 
 ### Git LFS Installation (Required)
