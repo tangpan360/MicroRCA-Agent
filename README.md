@@ -6,9 +6,7 @@ English | [中文](README_zh.md)
 
 ## Project Overview
 
-This project is an intelligent operations solution based on multi-modal data analysis, capable of processing Log, Trace, and Metric data for fault analysis and root cause localization through large language models. It adopts a modular architecture design with five core modules: data preprocessing module, log fault extraction module, trace fault detection module, metric fault summarization module, and multi-modal root cause analysis module. The modules are designed with loose coupling through function encapsulation for data interaction, ensuring both system integrity and module independence and scalability.
-
-The output contains structured root cause analysis results including component, reason, and reasoning_trace, achieving a complete closed loop from phenomenon observation to root cause reasoning.
+This project is an intelligent operations solution based on multi-modal data analysis, capable of processing Log, Trace, and Metric data for fault analysis and root cause localization through large language models. It adopts a modular architecture design with five core modules: data preprocessing module, log fault extraction module, trace fault detection module, metric fault summarization module, and multi-modal root cause analysis module. The modules are designed with loose coupling through function encapsulation for data interaction, ensuring both system integrity and module independence and scalability. The output contains structured root cause analysis results including component, reason, and reasoning_trace, achieving a complete closed loop from phenomenon observation to root cause reasoning.
 
 ![Project Architecture](imgs/overview.png)
 
