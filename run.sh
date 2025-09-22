@@ -25,9 +25,9 @@ if [ -d "./output" ]; then
     rm -rf ./output
 fi
 
-if [ -f "./answer.json" ]; then
-    echo "检测到 answer.json 文件，正在删除..."
-    rm -f ./answer.json
+if [ -f "./result.jsonl" ]; then
+    echo "检测到 result.jsonl 文件，正在删除..."
+    rm -f ./result.jsonl
 fi
 
 # 检查Docker状态
