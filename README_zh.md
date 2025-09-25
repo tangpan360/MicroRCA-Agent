@@ -413,6 +413,17 @@ num_processes = max(1, int(cpu_count() * 0.5))
 本项目参与的比赛为：**赛道一: 基于大模型智能体的微服务根因定位**  
 比赛官网：[CCF AIOps 2025 Challenge](https://challenge.aiops.cn/home/competition/1920410697896845344)
 
+## 引用
+
+```bibtex
+@article{tang2025microrca,
+  title={MicroRCA-Agent: Microservice Root Cause Analysis Method Based on Large Language Model Agents},
+  author={Tang, Pan and Tang, Shixiang and Pu, Huanqi and Miao, Zhiqing and Wang, Zhixing},
+  journal={arXiv preprint arXiv:2509.15635},
+  year={2025}
+}
+```
+
 ## Star History
 
 ![Star History Chart](https://api.star-history.com/svg?repos=tangpan360/MicroRCA-Agent&type=Date)

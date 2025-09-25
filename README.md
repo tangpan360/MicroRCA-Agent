@@ -408,6 +408,17 @@ Thanks to the CCF AIOps 2025 Challenge organizing committee for providing high-q
 This project participated in: **Track 1: LLM-Agent-Based Microservice Root Cause Analysis**  
 Competition website: [CCF AIOps 2025 Challenge](https://challenge.aiops.cn/home/competition/1920410697896845344)
 
+## Citation
+
+```bibtex
+@article{tang2025microrca,
+  title={MicroRCA-Agent: Microservice Root Cause Analysis Method Based on Large Language Model Agents},
+  author={Tang, Pan and Tang, Shixiang and Pu, Huanqi and Miao, Zhiqing and Wang, Zhixing},
+  journal={arXiv preprint arXiv:2509.15635},
+  year={2025}
+}
+```
+
 ## Star History
 
 ![Star History Chart](https://api.star-history.com/svg?repos=tangpan360/MicroRCA-Agent&type=Date)
