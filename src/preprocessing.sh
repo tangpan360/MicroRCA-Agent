@@ -25,13 +25,15 @@ echo "================================================"
 echo "开始并行下载 phaseone 和 phasetwo 数据..."
 echo "================================================"
 
-# 并行下载
-echo "同时开始下载两个数据集..."
+# 并行下载到项目根目录
+echo "同时开始下载两个数据集到项目根目录..."
+cd ..  # 切换到项目根目录进行下载
 git clone http://www.aiops.cn/gitlab/aiops-live-benchmark/phaseone.git &
 git clone http://www.aiops.cn/gitlab/aiops-live-benchmark/phasetwo.git &
 
 # 等待下载完成
 wait
+cd src  # 返回src目录继续后续处理
 
 echo "两个数据集下载完成，开始处理..."
 
@@ -41,7 +43,7 @@ echo "================================================"
 echo "处理 phaseone 数据..."
 echo "================================================"
 
-cd phaseone
+cd ../phaseone  # phaseone现在在项目根目录下
 
 # 检查文件完整性
 echo "------------------------------------------------"
@@ -82,21 +84,21 @@ echo "------------------------------------------------"
 echo "正在移动解压后的 phaseone 数据文件..."
 
 # 创建目标目录结构
-mkdir -p ../data/raw
+mkdir -p ../src/data/raw
 
 # 移动所有解压后的日期目录到目标位置
 for dir in 2025-06-*; do
     if [ -d "$dir" ]; then
         echo "移动 phaseone 目录: $dir"
-        mv "$dir" ../data/raw/
+        mv "$dir" ../src/data/raw/
     fi
 done
 
 
 echo "phaseone 数据文件移动完成"
 
-# 返回到项目根目录
-cd ..
+# 返回到src目录
+cd ../src
 
 # 处理 phasetwo  
 echo ""
@@ -104,7 +106,7 @@ echo "================================================"
 echo "处理 phasetwo 数据..."
 echo "================================================"
 
-cd phasetwo
+cd ../phasetwo  # phasetwo现在在项目根目录下
 
 # 检查文件完整性
 echo "------------------------------------------------"
@@ -148,15 +150,15 @@ echo "正在移动解压后的 phasetwo 数据文件..."
 for dir in 2025-*; do
     if [ -d "$dir" ]; then
         echo "移动 phasetwo 目录: $dir"
-        mv "$dir" ../data/raw/
+        mv "$dir" ../src/data/raw/
     fi
 done
 
 
 echo "phasetwo 数据文件移动完成"
 
-# 返回到项目根目录
-cd ..
+# 返回到src目录
+cd ../src
 
 echo ""
 echo "================================================"
@@ -215,42 +217,16 @@ fi
 
 echo ""
 echo "------------------------------------------------"
-echo "正在清理下载的临时文件夹..."
+echo "保留原始下载数据以备后续使用..."
 
-# 显示当前工作目录用于调试
+# 显示当前目录结构
 echo "当前工作目录: $(pwd)"
-echo "检查需要删除的文件夹..."
-ls -la . | grep -E "(phaseone|phasetwo|data)" || echo "未找到 phaseone、phasetwo 或 data 文件夹"
+echo "原始下载数据保留在项目根目录下:"
+ls -la ../phaseone ../phasetwo 2>/dev/null || echo "原始数据文件夹检查完成"
 
-# 清理下载的 phaseone 文件夹
-if [ -d "phaseone" ]; then
-    echo "删除 src/phaseone 文件夹"
-    rm -rf phaseone
-    if [ $? -eq 0 ]; then
-        echo "src/phaseone 文件夹删除成功"
-    else
-        echo "src/phaseone 文件夹删除失败"
-    fi
-else
-    echo "src/phaseone 文件夹不存在，跳过删除"
-fi
-
-# 清理下载的 phasetwo 文件夹  
-if [ -d "phasetwo" ]; then
-    echo "删除 src/phasetwo 文件夹"
-    rm -rf phasetwo
-    if [ $? -eq 0 ]; then
-        echo "src/phasetwo 文件夹删除成功"
-    else
-        echo "src/phasetwo 文件夹删除失败"
-    fi
-else
-    echo "src/phasetwo 文件夹不存在，跳过删除"
-fi
-
-# 清理src目录下的data文件夹（如果存在且为空）
+# 清理src目录下的临时data文件夹（如果存在且为空）
 if [ -d "data" ]; then
-    echo "检查并删除 src/data 文件夹"
+    echo "清理 src/data 临时文件夹"
     # 先尝试删除空目录，如果不为空则强制删除
     if rmdir data 2>/dev/null; then
         echo "src/data 空目录删除成功"
@@ -258,21 +234,23 @@ if [ -d "data" ]; then
         echo "src/data 目录不为空，强制删除"
         rm -rf data
         if [ $? -eq 0 ]; then
-            echo "src/data 文件夹强制删除成功"
+            echo "src/data 临时文件夹删除成功"
         else
-            echo "src/data 文件夹删除失败"
+            echo "src/data 临时文件夹删除失败"
         fi
     fi
 else
-    echo "src/data 文件夹不存在，跳过删除"
+    echo "src/data 临时文件夹不存在，跳过删除"
 fi
 
-echo "临时文件夹清理完成"
+echo "数据保留和临时文件清理完成"
+echo "原始数据已保留在项目根目录的 phaseone/ 和 phasetwo/ 文件夹中"
 
 echo ""
 echo "================================================"
 echo "所有数据预处理完成！"
 echo "- 处理后的数据存储在 data/processed/ 目录下"
 echo "- 已跳过input合并处理，使用现有input文件"
-echo "- 已清理下载的临时文件夹（src/phaseone, src/phasetwo, src/data）"
+echo "- 原始下载数据已保留在项目根目录（phaseone/, phasetwo/）"
+echo "- 仅清理了src目录下的临时data文件夹"
 echo "================================================"
