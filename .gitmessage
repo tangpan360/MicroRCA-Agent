@@ -1,0 +1,16 @@
+# <type>(<scope>): <description>
+#
+# Example:
+# feat(auth): add Google OAuth login
+# fix(api): handle null user data gracefully
+#
+# Types: feat, fix, docs, style, refactor, perf, test, build, ci, chore
+#
+# Body (optional): Explain *what* and *why*, not *how*.
+# Keep lines under 72 characters.
+#
+# Footer (optional):
+# - Reference issues: Closes #123, Fixes #456
+# - Breaking changes: BREAKING CHANGE: <description>
+#
+# —— 请删除这些注释后填写实际内容 ——
