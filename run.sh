@@ -2,11 +2,18 @@
 
 echo "=== 开始构建和运行 AIops 解决方案 ==="
 
-# 检查 data/processed 是否存在
-if [ -d "./data/processed" ]; then
-    echo "检测到 data/processed 目录，跳过数据预处理"
+# 检查 data/processed 是否存在且包含parquet文件
+if [ -d "./data/processed" ] && find ./data/processed/2025-06-* -name "*.parquet" -type f 2>/dev/null | head -1 | grep -q .; then
+    echo "检测到 data/processed 目录且包含数据文件，跳过数据预处理"
 else
-    echo "未检测到 data/processed 目录，开始执行数据预处理..."
+    echo "未检测到完整的处理数据，开始执行数据预处理..."
+    
+    # 如果存在不完整的processed目录，先清理
+    if [ -d "./data/processed" ]; then
+        echo "清理不完整的 data/processed 目录..."
+        rm -rf ./data/processed
+    fi
+    
     # 进入 src 目录执行预处理脚本
     cd src
     bash preprocessing.sh
@@ -17,6 +24,21 @@ else
     fi
     # 返回到项目根目录
     cd ..
+    
+    # 检查预处理是否成功生成了数据文件
+    if ! find ./data/processed/2025-06-* -name "*.parquet" -type f 2>/dev/null | head -1 | grep -q .; then
+        echo ""
+        echo "⚠️  警告: 预处理完成但未发现数据文件"
+        echo "这通常表示conda虚拟环境或依赖包配置有问题"
+        echo ""
+        echo "请按照README中的步骤创建环境并安装依赖："
+        echo "1. 创建conda虚拟环境"
+        echo "2. 激活conda虚拟环境" 
+        echo "3. 安装requirements.txt中的依赖包"
+        echo ""
+        echo "然后重新运行此脚本"
+        exit 1
+    fi
 fi
 
 # 每次运行前清理 output 目录和 answer.json 文件
