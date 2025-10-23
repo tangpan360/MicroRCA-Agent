@@ -124,19 +124,19 @@ trap cleanup SIGINT SIGTERM
 # 等待容器完成
 echo "等待容器执行完成..."
 echo "提示: 按 Ctrl+C 可以安全停止容器"
-if ! docker wait $CONTAINER_ID; then
-    echo "错误: 容器运行失败"
-    docker logs $CONTAINER_ID
+
+# docker wait 直接返回容器的退出码
+EXIT_CODE=$(docker wait $CONTAINER_ID)
+
+if [ "$EXIT_CODE" != "0" ]; then
+    echo "错误: 容器异常退出，退出码: $EXIT_CODE"
+    # 注意：由于使用了--rm，容器可能已被删除，需要在退出前获取日志
+    echo "尝试获取容器日志..."
+    docker logs $CONTAINER_ID 2>/dev/null || echo "容器已被删除，无法获取日志"
     exit 1
 fi
 
-# 获取容器退出状态
-EXIT_CODE=$(docker inspect $CONTAINER_ID --format='{{.State.ExitCode}}' 2>/dev/null || echo "unknown")
-if [ "$EXIT_CODE" != "0" ] && [ "$EXIT_CODE" != "unknown" ]; then
-    echo "错误: 容器异常退出，退出码: $EXIT_CODE"
-    docker logs $CONTAINER_ID
-    exit 1
-fi
+echo "容器执行成功，退出码: $EXIT_CODE"
 
 # 检查结果文件是否存在
 if [ ! -f "./output/result.jsonl" ]; then

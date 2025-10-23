@@ -27,5 +27,4 @@ RUN groupadd -g $GROUP_ID appuser && \
 USER appuser
 
 # 运行程序，然后将结果从submission复制到output
-CMD python main_multiprocessing.py && \
-    cp submission/result.jsonl /app/output/result.jsonl
+CMD ["sh", "-c", "python main_multiprocessing.py && cp submission/result.jsonl /app/output/result.jsonl"]
