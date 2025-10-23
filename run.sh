@@ -28,7 +28,7 @@ else
     # 检查预处理是否成功生成了数据文件
     if ! find ./data/processed/2025-06-* -name "*.parquet" -type f 2>/dev/null | head -1 | grep -q .; then
         echo ""
-        echo "⚠️  警告: 预处理完成但未发现数据文件"
+        echo "⚠️  警告: 预处理完成但未在 data/processed/2025-06-*/ 中发现 parquet 数据文件"
         echo ""
         echo "可能的原因："
         echo "1. Git LFS 未安装或未正确配置"
