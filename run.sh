@@ -29,14 +29,22 @@ else
     if ! find ./data/processed/2025-06-* -name "*.parquet" -type f 2>/dev/null | head -1 | grep -q .; then
         echo ""
         echo "⚠️  警告: 预处理完成但未发现数据文件"
-        echo "这通常表示conda虚拟环境或依赖包配置有问题"
         echo ""
-        echo "请按照README中的步骤创建环境并安装依赖："
-        echo "1. 创建conda虚拟环境"
-        echo "2. 激活conda虚拟环境" 
-        echo "3. 安装requirements.txt中的依赖包"
+        echo "可能的原因："
+        echo "1. Git LFS 未安装或未正确配置"
+        echo "   - 请按照README中的步骤安装 Git LFS："
         echo ""
-        echo "然后重新运行此脚本"
+        echo "2. conda虚拟环境或依赖包配置有问题"
+        echo "   - 请按照README中的步骤创建环境并安装依赖："
+        echo "   - 创建conda虚拟环境"
+        echo "   - 激活conda虚拟环境" 
+        echo "   - 安装requirements.txt中的依赖包"
+        echo ""
+        echo "建议步骤："
+        echo "1. 首先检查并安装Git LFS"
+        echo "2. 删除现有的 phaseone 和 phasetwo 文件夹"
+        echo "3. 重新运行此脚本以重新下载数据"
+        echo ""
         exit 1
     fi
 fi
