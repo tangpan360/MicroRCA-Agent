@@ -12,8 +12,21 @@ CONTEST = '1963605668447416345'
 # 团队ID, 需要在参加比赛并组队后能获得，具体在比赛详情页-> 团队 -> 团队ID，为一串数字标识。 
 TICKET = ''
 
+def _validate_config():
+    if not TICKET.strip():
+        raise ValueError("❌ TICKET (Team ID) is not configured! Please replace it with your actual team ID in submit.py")
+    if not CONTEST.strip():
+        raise ValueError("❌ CONTEST (Competition ID) is not configured! Please verify the correctness of the competition track ID")
+    if not JUDGE_SERVER.startswith(('http://', 'https://')):
+        raise ValueError("❌ JUDGE_SERVER format error! Must start with http/https")
 
 def submit(data, judge_server=None, contest=None, ticket=None):
+    try:
+        _validate_config()
+    except ValueError as e:
+        print(e)
+        return None
+        
     judge_server = judge_server or JUDGE_SERVER
     contest = contest or CONTEST
     ticket = ticket or TICKET
