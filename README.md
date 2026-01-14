@@ -5,7 +5,7 @@
 [![Zhihu Column](https://img.shields.io/badge/Zhihu-专栏-blue)](https://zhuanlan.zhihu.com/p/1952762182740711344)
 [![CSDN Blog](https://img.shields.io/badge/CSDN-博客-orange)](https://blog.csdn.net/weixin_51524504/article/details/151900832?spm=1001.2014.3001.5501)
 
-<div align="right">English | <a href="README_zh.md">中文</a></div>
+English | [中文](README_zh.md)
 
 ## 2025 International AIOps Challenge (Finals Top 5, 48.52 points)
 
