@@ -1,5 +1,9 @@
 # MicroRCA-Agent：基于大模型智能体的微服务根因定位方法
 
+[![arxiv badge](https://img.shields.io/badge/arxiv-2509.15635-red)](https://arxiv.org/abs/2509.15635)
+[![GitHub Repo stars](https://img.shields.io/github/stars/tangpan360/MicroRCA-Agent?style=social)](https://github.com/tangpan360/MicroRCA-Agent/stargazers)
+[![Zhihu Column](https://img.shields.io/badge/Zhihu-专栏-blue)](https://zhuanlan.zhihu.com/p/1952762182740711344)
+[![CSDN Blog](https://img.shields.io/badge/CSDN-博客-orange)](https://blog.csdn.net/weixin_51524504/article/details/151900832?spm=1001.2014.3001.5501)
 [English](README.md) | 中文
 
 ## 2025 国际 AIOps 挑战赛（决赛 Top5，48.52分）
